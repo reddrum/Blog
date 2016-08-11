@@ -40,6 +40,7 @@ configure do
 end
 
 get '/' do
+
   # выбираем список постов из БД
   @results = @db.execute 'select * from Posts order by id desc'
 
@@ -51,6 +52,7 @@ get '/new' do
 end
 
 post '/new' do
+
   # получаем переменную из post-запроса
   content = params[:content]
 
@@ -69,6 +71,7 @@ end
 
 # вывод информации о посте
 get '/details/:post_id' do
+
   # получаем переменную из url
 	post_id = params[:post_id]
 
@@ -82,8 +85,17 @@ get '/details/:post_id' do
 end
 
 post '/details/:post_id' do
+
+	# получаем переменную из url
 	post_id = params[:post_id]
 
+  # получаем переменную из post-запроса
 	content = params[:content]
+
+	@db.execute 'insert into Comments
+							(content, created_date, post_id)
+							values (?, datetime(), ?)', [content, post_id]
+
+	redirect to('/details' + post_id)
 
 end
