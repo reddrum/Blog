@@ -10,12 +10,19 @@ def init_db
 	@db.results_as_hash = true
 end
 
+# before вызывается каждый раз при перезагрузке
+# либой страницы
 before do
+	# инициализация БД
 	init_db
 end
 
+# вызывается каждый раз при конфигурации приложения:
+# когда изменился код программы и перезагрузилась страница
 configure do
+  # инициализация БД
   init_db
+	# создает таблицу если таблица не существует
 	@db.execute 'CREATE TABLE IF NOT EXISTS Posts
 							(
 							id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +40,7 @@ get '/new' do
 end
 
 post 'new' do
+  # получаем переменную из post-запроса
   content = params[:content]
 
   erb "You typed #{content}"
