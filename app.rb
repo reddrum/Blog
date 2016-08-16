@@ -94,6 +94,11 @@ post '/details/:post_id' do
   # получаем переменную из post-запроса
 	content = params[:content]
 
+	# if content.length <= 0
+	# 	@error = 'Type post text'
+	# erb :details
+	# end
+
 	@db.execute 'insert into Comments
 							(content, created_date, post_id)
 							values (?, datetime(), ?)', [content, post_id]
